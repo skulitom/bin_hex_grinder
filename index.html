@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Binary to Hexadecimal Game</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        #score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #binary-number {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #input-field {
+            font-size: 32px;
+            padding: 10px;
+            width: 200px;
+            background-color: #1E1E1E;
+            color: #FFFFFF;
+            border: none;
+            border-bottom: 2px solid #FFFFFF;
+            outline: none;
+            text-align: center;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        /* Added styles for correct and wrong feedback */
+        .correct {
+            color: #00FF00; /* Green */
+        }
+
+        .wrong {
+            color: #FF0000; /* Red */
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="score">Score: 0</div>
+        <div id="binary-number"></div>
+        <input type="text" id="input-field" autocomplete="off" autofocus>
+        <div id="feedback"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentBinary = '';
+    
+        function generateBinaryNumber() {
+            const bits = 8; // Always 8 bits
+            let binaryNumber = '';
+            for (let i = 0; i < bits; i++) {
+                binaryNumber += Math.floor(Math.random() * 2);
+            }
+            return binaryNumber;
+        }
+    
+        function updateGame() {
+            currentBinary = generateBinaryNumber();
+            document.getElementById('binary-number').textContent = currentBinary;
+            document.getElementById('input-field').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = ''; // Reset feedback class
+            document.getElementById('input-field').focus();
+        }
+    
+        document.getElementById('input-field').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                const userAnswer = document.getElementById('input-field').value.trim().toUpperCase();
+                const correctAnswer = parseInt(currentBinary, 2).toString(16).toUpperCase();
+    
+                const feedbackElement = document.getElementById('feedback');
+                let time = 300;
+    
+                if (userAnswer === correctAnswer) {
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.className = 'correct';
+                    score++;
+                } else {
+                    feedbackElement.textContent = `Wrong! Correct answer: ${correctAnswer}`;
+                    feedbackElement.className = 'wrong';
+                    time = 1500;
+                    score = 0;
+                }
+    
+                document.getElementById('score').textContent = `Score: ${score}`;
+    
+                setTimeout(updateGame, time); // Wait a second before showing next question
+            }
+        });
+    
+        // Start the game
+        updateGame();
+    </script>
+    
+</body>
+</html>
